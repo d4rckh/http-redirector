@@ -1,6 +1,6 @@
 # lightweight http redirector
 
-lightweight http server that redirects requests to another http server. useful for c2 http redirectors. soon this will also be able to redirect plain tcp communication
+lightweight http server that redirects requests to another http server. soon this will also be able to redirect plain tcp communication
 
 ## building
 1. install nim using [dom96/choosenim](https://github.com/dom96/choosenim)
