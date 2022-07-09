@@ -9,7 +9,8 @@ type
   LogType* = enum
     Info = "info",
     Error = "error",
-    Warn = "warning"
+    Warn = "warning",
+    Debug = "debug"
 
 proc log*(logType: LogType = Info, message: string) =
   case logType:
@@ -19,6 +20,8 @@ proc log*(logType: LogType = Info, message: string) =
     stdout.styledWrite fgRed, "ERR  ", fgDefault
   of Warn:
     stdout.styledWrite fgYellow, "WARN ", fgDefault
+  of Debug:
+    stdout.styledWrite fgMagenta, "DBG  ", fgDefault
   stdout.writeLine message
 
 proc logHeaders*(headers: HttpHeaders) =

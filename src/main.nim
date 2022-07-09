@@ -50,16 +50,15 @@ proc main {.async.} =
 
   proc cb(req: Request) {.async.} =
 
-    var client = newAsyncHttpClient()
+    var client = newAsyncHttpClient(maxRedirects=5)
     let proxyReqHeaders = req.headers
     if app.hostHeader != "":
       proxyReqHeaders.del("host")
       proxyReqHeaders["host"] = @[app.hostHeader]
     if app.transparent:
       proxyReqHeaders["X-Forwarded-For"] = @[req.hostname]
-    
-    
-    log Info, fmt"{req.hostname} -> redirector -> {app.baseUrl} ({req.url.path})" 
+
+    log Info, fmt"REQ {req.hostname} -> redirector -> {app.baseUrl}{req.url.path}" 
     if app.printHeaders: logHeaders proxyReqHeaders
 
     let response = await client.request(
@@ -68,10 +67,17 @@ proc main {.async.} =
       headers=proxyReqHeaders
     )
 
-    var proxyResponseBody = await response.body
+    log Debug, fmt"Got {response.status}, reading body"
+
+    
+    var proxyResponseBody: string
+    if response.code == Http304:
+      proxyResponseBody = ""
+    else:
+      proxyResponseBody = await response.body
     # proxyResponseBody = proxyResponseBody.replace("https://example.org", "http://localhost:1234")
     
-    log Info, fmt"RES {req.hostname} <- redirector <- {app.baseUrl} ({response.status})" 
+    log Info, fmt"RES {req.hostname} <- redirector <- {app.baseUrl}{req.url.path} ({response.status})" 
     if app.printHeaders: logHeaders response.headers
     if app.printBody: logBody proxyResponseBody 
 
