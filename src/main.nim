@@ -57,14 +57,16 @@ proc main {.async.} =
       proxyReqHeaders["host"] = @[app.hostHeader]
     if app.transparent:
       proxyReqHeaders["X-Forwarded-For"] = @[req.hostname]
-
-    log Info, fmt"REQ {req.hostname} -> redirector -> {app.baseUrl}{req.url.path}" 
+    echo req.url
+    log Info, fmt"REQ {req.reqMethod} {req.hostname} -> redirector -> {app.baseUrl}{req.url.path}?{req.url.query}" 
     if app.printHeaders: logHeaders proxyReqHeaders
+    if app.printBody: logBody req.body
 
     let response = await client.request(
-      app.baseUrl & req.url.path,
+      app.baseUrl & req.url.path & "?" & req.url.query,
       httpMethod=req.reqMethod,
-      headers=proxyReqHeaders
+      headers=proxyReqHeaders,
+      body=req.body
     )
 
     log Debug, fmt"Got {response.status}, reading body"
