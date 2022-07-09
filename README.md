@@ -2,6 +2,8 @@
 
 this is a lightweight http server that redirects requests to another http server.
 
+![image](https://user-images.githubusercontent.com/35298550/178099525-8cf116a4-c2d5-49ed-b67e-9bb7baf584bc.png)
+
 ## building
 1. install nim using [dom96/choosenim](https://github.com/dom96/choosenim)
 2. clone the repo
