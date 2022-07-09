@@ -57,7 +57,7 @@ proc main {.async.} =
       proxyReqHeaders["host"] = @[app.hostHeader]
     if app.transparent:
       proxyReqHeaders["X-Forwarded-For"] = @[req.hostname]
-    echo req.url
+
     log Info, fmt"REQ {req.reqMethod} {req.hostname} -> redirector -> {app.baseUrl}{req.url.path}?{req.url.query}" 
     if app.printHeaders: logHeaders proxyReqHeaders
     if app.printBody: logBody req.body
@@ -69,8 +69,8 @@ proc main {.async.} =
       body=req.body
     )
 
-    log Debug, fmt"Got {response.status}, reading body"
-
+    when defined(debug):
+      log Debug, fmt"Got {response.status}, reading body"
     
     var proxyResponseBody: string
     if response.code == Http304:

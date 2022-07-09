@@ -1,6 +1,6 @@
-# lightweight http redirector
+# http redirector
 
-lightweight http server that redirects requests to another http server. soon this will also be able to redirect plain tcp communication
+this is a lightweight http server that redirects requests to another http server.
 
 ## building
 1. install nim using [dom96/choosenim](https://github.com/dom96/choosenim)
