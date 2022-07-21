@@ -7,7 +7,8 @@ this is a lightweight http server that redirects requests to another http server
 ## building
 1. install nim using [dom96/choosenim](https://github.com/dom96/choosenim)
 2. clone the repo
-3. run `nim -d:ssl c src/main.nim`
+3. run `nimble install argparse`
+4. run `nim -d:ssl c src/main.nim`
 
 ## options and flags
 ```
